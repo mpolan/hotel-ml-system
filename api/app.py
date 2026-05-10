@@ -194,7 +194,19 @@ def predict_cluster(hotel: HotelInput):
         data["cleanliness_rating"],
     ]
 
-    subratings_confidence = sum(x is not None for x in subratings) / len(subratings)
+    n_subratings = sum(x is not None for x in subratings)
+
+    ALPHA = 5
+    subratings_confidence = n_subratings / (n_subratings + ALPHA)
+
+
+    if num_reviews == 0:
+        bad_review_share = 0
+        excellent_review_share = 0
+    else:
+        bad_review_share = safe_div(bad_reviews, num_reviews)
+        excellent_review_share = safe_div(excellent_reviews, num_reviews)
+
 
     engineered_data = {
         "rating": data["rating"],
@@ -216,15 +228,8 @@ def predict_cluster(hotel: HotelInput):
             else None
         ),
 
-        "bad_review_share": safe_div(
-            bad_reviews,
-            num_reviews
-        ),
-
-        "excellent_review_share": safe_div(
-            excellent_reviews,
-            num_reviews
-        ),
+        "bad_review_share": bad_review_share,
+        "excellent_review_share": excellent_review_share,
 
         "location_rating": data["location_rating"],
         "rooms_rating": data["rooms_rating"],
@@ -236,14 +241,17 @@ def predict_cluster(hotel: HotelInput):
     }
 
     row = {}
+    imputed_features = []
 
     for feature in features_final:
         value = engineered_data.get(feature)
 
         if value is None or pd.isna(value):
             value = feature_medians[feature]
+            imputed_features.append(feature)
 
         row[feature] = value
+
 
     df_new = pd.DataFrame([row])
     df_new = df_new[features_final]
@@ -257,6 +265,13 @@ def predict_cluster(hotel: HotelInput):
         "cluster": cluster_id,
         "cluster_info": CLUSTER_INFO.get(cluster_id) or CLUSTER_INFO.get(str(cluster_id)),
         "used_features": row,
+        "imputed_features": imputed_features,
+        "imputed_count": len(imputed_features),
+        "prediction_warning": (
+            "Predykcja oparta częściowo na medianach treningowych"
+            if imputed_features
+            else None
+        )
     }
 
 from data.get_data.tripadvisor_config import BASE_URL, API_KEY
