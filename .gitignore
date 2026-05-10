@@ -1,0 +1,82 @@
+# =========================
+# Python
+# =========================
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+
+# Virtual environments
+venv/
+.venv/
+env/
+ENV/
+
+# =========================
+# Jupyter
+# =========================
+.ipynb_checkpoints/
+
+# =========================
+# VSCode / IDE
+# =========================
+.vscode/
+.idea/
+
+# =========================
+# OS files
+# =========================
+.DS_Store
+Thumbs.db
+
+# =========================
+# Environment variables
+# =========================
+.env
+
+# =========================
+# Logs
+# =========================
+*.log
+
+# =========================
+# Build / cache
+# =========================
+.pytest_cache/
+.mypy_cache/
+.cache/
+
+# =========================
+# ML Models
+# =========================
+models/
+*.joblib
+*.pkl
+
+# =========================
+# Data files
+# =========================
+data/raw/
+data/processed/
+*.csv
+
+# Jeśli chcesz trzymać przykładowe CSV w repo:
+# !data/example.csv
+
+# =========================
+# FastAPI
+# =========================
+*.sqlite3
+
+# =========================
+# Coverage
+# =========================
+htmlcov/
+.coverage
+
+# =========================
+# Temporary files
+# =========================
+tmp/
+temp/
