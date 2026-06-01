@@ -58,8 +58,8 @@ models/
 # Data files
 # =========================
 data/raw/
-data/processed/
-*.csv
+test
+# *.csv
 
 # Jeśli chcesz trzymać przykładowe CSV w repo:
 # !data/example.csv
