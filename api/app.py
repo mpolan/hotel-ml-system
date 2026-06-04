@@ -5,8 +5,9 @@ import json
 from fastapi import FastAPI
 from pydantic import BaseModel
 from typing import Any
+from sklearn.metrics.pairwise import cosine_similarity
 
-from .config import CLUSTER_INFO, CLUSTERS_CSV, MODEL_DIR
+from .config import CLUSTER_INFO, CLUSTERS_CSV, MODEL_DIR, TFIDF_INDEX_PATH
 
 
 app = FastAPI()
@@ -165,6 +166,15 @@ feature_medians = joblib.load(MODEL_DIR / "feature_medians.joblib")
 
 with open(MODEL_DIR / "features_final.json", encoding="utf-8") as f:
     features_final = json.load(f)
+
+#*====================== TF-IDF ==============================
+
+tfidf_index = joblib.load(TFIDF_INDEX_PATH)
+tfidf_vectorizer = tfidf_index['vectorizer']
+tfidf_matrix = tfidf_index['matrix']
+tfidf_hotels = tfidf_index['hotels']
+
+
 
 def safe_div(a, b):
     if a is None or b is None or b == 0:
@@ -352,3 +362,81 @@ def get_hotels_from_city(city: str, limit: int = 10):
     }
 
     
+@app.get("/recommend/{location_id}")
+def recomend_hotels(location_id: int, limit: int = 5):
+    hotel_idx = None
+
+    for idx, hotel in enumerate(tfidf_hotels):
+        if int(hotel['location_id']) == location_id:
+            hotel_idx = idx
+            break
+
+    if hotel_idx is None:
+        return{
+            "error": "Nie znaleziono hotelu",
+            "location_id": location_id
+        }
+
+    scores = cosine_similarity(
+        tfidf_matrix[hotel_idx], 
+        tfidf_matrix
+    ).flatten()
+
+    best = scores.argsort()[::-1]
+
+    recommendations = []
+
+    for i in best:
+        if i == hotel_idx:
+            continue
+        hotel = tfidf_hotels[i]
+
+        recommendations.append({
+            "location_id": int(hotel["location_id"]),
+            "name": hotel.get("name_details"),
+            "city": hotel.get("address_obj.city_details"),
+            "rating": hotel.get("rating"),
+            "price_level": hotel.get("price_level"),
+            "similarity_score": round(float(scores[i]), 4),
+        })
+
+        if len(recommendations) >= limit:
+            break
+
+    selected_hotel = tfidf_hotels[hotel_idx]
+    context = {
+        "source_hotel": {
+            "location_id": int(selected_hotel["location_id"]),
+            "name": selected_hotel.get("name_details"),
+            "city": selected_hotel.get("address_obj.city_details"),
+        },
+        "recommendations": recommendations
+    }
+
+    return context
+
+@app.get("/search-hotels")
+def search_hotels(query: str, limit: int = 5):
+    q = tfidf_vectorizer.transform([query])
+
+    scores = cosine_similarity(q, tfidf_matrix).flatten()
+    best_indices = scores.argsort()[::-1][:limit]
+
+    results = []
+
+    for idx in best_indices:
+        hotel = tfidf_hotels[idx]
+
+        results.append({
+            "location_id": int(hotel["location_id"]),
+            "name": hotel.get("name_details"),
+            "city": hotel.get("address_obj.city_details"),
+            "rating": hotel.get("rating"),
+            "price_level": hotel.get("price_level"),
+            "similarity_score": round(float(scores[idx]), 4),
+        })
+
+    return {
+        "query": query,
+        "results": results
+    }

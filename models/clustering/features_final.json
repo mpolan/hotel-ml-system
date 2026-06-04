@@ -1,0 +1,14 @@
+[
+  "rating",
+  "log_num_reviews",
+  "ranking_ratio",
+  "price_level_num",
+  "bad_review_share",
+  "excellent_review_share",
+  "location_rating",
+  "rooms_rating",
+  "service_rating",
+  "value_rating",
+  "cleanliness_rating",
+  "subratings_confidence"
+]

@@ -16,3 +16,5 @@ KMEANS_MODEL_PATH = MODEL_DIR / "kmeans_model.joblib"
 SCALER_PATH = MODEL_DIR / "scaler.joblib"
 FEATURE_MEDIANS_PATH = MODEL_DIR / "feature_medians.joblib"
 FEATURES_FINAL_PATH = MODEL_DIR / "features_final.json"
+
+TFIDF_INDEX_PATH = BASE_DIR / 'models' / 'tf_idf' / 'tfidf_index.joblib'

@@ -50,9 +50,9 @@ Thumbs.db
 # =========================
 # ML Models
 # =========================
-models/
-*.joblib
-*.pkl
+# models/
+# *.joblib
+# *.pkl
 
 # =========================
 # Data files
