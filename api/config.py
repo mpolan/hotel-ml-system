@@ -18,3 +18,5 @@ FEATURE_MEDIANS_PATH = MODEL_DIR / "feature_medians.joblib"
 FEATURES_FINAL_PATH = MODEL_DIR / "features_final.json"
 
 TFIDF_INDEX_PATH = BASE_DIR / 'models' / 'tf_idf' / 'tfidf_index.joblib'
+
+SENTIMENT_MODEL_PATH = BASE_DIR / "models" / "classification" / "sentiment_model.joblib"

@@ -7,7 +7,7 @@ from pydantic import BaseModel
 from typing import Any
 from sklearn.metrics.pairwise import cosine_similarity
 
-from .config import CLUSTER_INFO, CLUSTERS_CSV, MODEL_DIR, TFIDF_INDEX_PATH
+from .config import CLUSTER_INFO, CLUSTERS_CSV, MODEL_DIR, TFIDF_INDEX_PATH, SENTIMENT_MODEL_PATH
 
 
 app = FastAPI()
@@ -41,6 +41,9 @@ PRICE_MAPPING = {
     "$$$": 3,
     "$$$$": 4
 }
+
+class SentimentInput(BaseModel):
+    review: str
 
 hotels = pd.read_csv('data/full/hotels.csv')
 print(hotels.columns)
@@ -175,6 +178,14 @@ tfidf_matrix = tfidf_index['matrix']
 tfidf_hotels = tfidf_index['hotels']
 
 
+#*================================ CLASSIFICATION: ================================
+
+
+
+sentiment_data = joblib.load(SENTIMENT_MODEL_PATH)
+
+sentiment_vectorizer = sentiment_data["vectorizer"]
+sentiment_model = sentiment_data["model"]
 
 def safe_div(a, b):
     if a is None or b is None or b == 0:
@@ -440,3 +451,30 @@ def search_hotels(query: str, limit: int = 5):
         "query": query,
         "results": results
     }
+
+
+@app.post("/predict-sentiment")
+def predict_sentiment(input_data: SentimentInput):
+    text = input_data.review
+
+    X = sentiment_vectorizer.transform([text])
+
+    prediction = int(sentiment_model.predict(X)[0])
+
+    result = "positive" if prediction == 1 else "negative"
+
+    response = {
+        "review": text,
+        "sentiment": result,
+        "label": prediction,
+    }
+
+    if hasattr(sentiment_model, "predict_proba"):
+        probabilities = sentiment_model.predict_proba(X)[0]
+
+        response["probability"] = {
+            "negative": round(float(probabilities[0]), 4),
+            "positive": round(float(probabilities[1]), 4),
+        }
+
+    return response
