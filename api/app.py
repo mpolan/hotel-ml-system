@@ -7,7 +7,17 @@ from pydantic import BaseModel
 from typing import Any
 from sklearn.metrics.pairwise import cosine_similarity
 
-from .config import CLUSTER_INFO, CLUSTERS_CSV, MODEL_DIR, TFIDF_INDEX_PATH, SENTIMENT_MODEL_PATH
+from .config import (
+    CLUSTER_INFO,
+    CLUSTERS_CSV,
+    FEATURE_MEDIANS_PATH,
+    FEATURES_FINAL_PATH,
+    HOTELS_CSV,
+    KMEANS_MODEL_PATH,
+    SCALER_PATH,
+    SENTIMENT_MODEL_PATH,
+    TFIDF_INDEX_PATH,
+)
 
 
 app = FastAPI()
@@ -45,8 +55,7 @@ PRICE_MAPPING = {
 class SentimentInput(BaseModel):
     review: str
 
-hotels = pd.read_csv('data/full/hotels.csv')
-print(hotels.columns)
+hotels = pd.read_csv(HOTELS_CSV)
 
 @app.get("/")
 def root():
@@ -163,11 +172,11 @@ def get_all_cluster(cluster_id: int):
     return context
 
 
-model = joblib.load(MODEL_DIR / "kmeans_model.joblib")
-scaler = joblib.load(MODEL_DIR / "scaler.joblib")
-feature_medians = joblib.load(MODEL_DIR / "feature_medians.joblib")
+model = joblib.load(KMEANS_MODEL_PATH)
+scaler = joblib.load(SCALER_PATH)
+feature_medians = joblib.load(FEATURE_MEDIANS_PATH)
 
-with open(MODEL_DIR / "features_final.json", encoding="utf-8") as f:
+with open(FEATURES_FINAL_PATH, encoding="utf-8") as f:
     features_final = json.load(f)
 
 #*====================== TF-IDF ==============================
