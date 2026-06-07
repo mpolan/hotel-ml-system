@@ -194,6 +194,25 @@ def ui():
         <p><label>Cleanliness rating:
             <input name="cleanliness_rating" type="number" min="0" max="5" step="0.1" value="4.6">
         </label></p>
+        <p><label>Liczba ocen 1:
+            <input name="review_rating_count_1" type="number" min="0" value="5">
+        </label></p>
+
+        <p><label>Liczba ocen 2:
+            <input name="review_rating_count_2" type="number" min="0" value="5">
+        </label></p>
+
+        <p><label>Liczba ocen 3:
+            <input name="review_rating_count_3" type="number" min="0" value="20">
+        </label></p>
+
+        <p><label>Liczba ocen 4:
+            <input name="review_rating_count_4" type="number" min="0" value="50">
+        </label></p>
+
+        <p><label>Liczba ocen 5:
+            <input name="review_rating_count_5" type="number" min="0" value="70">
+        </label></p>
         <button type="submit">Przewidź klaster</button>
     </form>
 
@@ -274,7 +293,12 @@ def ui():
                 rooms_rating: optionalNumber(data, "rooms_rating"),
                 service_rating: optionalNumber(data, "service_rating"),
                 value_rating: optionalNumber(data, "value_rating"),
-                cleanliness_rating: optionalNumber(data, "cleanliness_rating")
+                cleanliness_rating: optionalNumber(data, "cleanliness_rating"),
+                review_rating_count_1: optionalNumber(data, "review_rating_count_1"),
+                review_rating_count_2: optionalNumber(data, "review_rating_count_2"),
+                review_rating_count_3: optionalNumber(data, "review_rating_count_3"),
+                review_rating_count_4: optionalNumber(data, "review_rating_count_4"),
+                review_rating_count_5: optionalNumber(data, "review_rating_count_5"),
             })
             });
         });
