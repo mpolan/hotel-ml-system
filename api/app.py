@@ -75,8 +75,7 @@ def ui():
 </head>
 <body>
     <h1>Hotel Analytics ML</h1>
-    <p>Prosty interfejs do testowania modeli działających na lokalnych danych.</p>
-    <p><a href="/docs">Dokumentacja API</a></p>
+    <p><a href="/docs">FastAPI docs</a></p>
 
     <hr>
 
@@ -148,9 +147,15 @@ def ui():
 
     <h2>Predykcja klastra hotelu</h2>
     <form id="predict-cluster-form">
-        <p><label>Nazwa: <input name="name_details" required></label></p>
-        <p><label>Ocena 0-5: <input name="rating" type="number" min="0" max="5" step="0.1"></label></p>
-        <p><label>Liczba opinii: <input name="num_reviews" type="number" min="0"></label></p>
+        <p><label>Nazwa: <input name="name_details" value="Test Hotel" required></label></p>
+
+        <p><label>Ocena 0-5:
+            <input name="rating" type="number" min="0" max="5" step="0.1" value="4.4">
+        </label></p>
+
+        <p><label>Liczba opinii:
+            <input name="num_reviews" type="number" min="0" value="150">
+        </label></p>
         <p>
             <label>
                 Poziom cen:
@@ -163,13 +168,32 @@ def ui():
                 </select>
             </label>
         </p>
-        <p><label>Pozycja w rankingu: <input name="ranking" type="number" min="1"></label></p>
-        <p><label>Liczba hoteli w rankingu: <input name="ranking_out_of" type="number" min="1"></label></p>
-        <p><label>Location rating: <input name="location_rating" type="number" min="0" max="5" step="0.1"></label></p>
-        <p><label>Rooms rating: <input name="rooms_rating" type="number" min="0" max="5" step="0.1"></label></p>
-        <p><label>Service rating: <input name="service_rating" type="number" min="0" max="5" step="0.1"></label></p>
-        <p><label>Value rating: <input name="value_rating" type="number" min="0" max="5" step="0.1"></label></p>
-        <p><label>Cleanliness rating: <input name="cleanliness_rating" type="number" min="0" max="5" step="0.1"></label></p>
+        <p><label>Pozycja w rankingu:
+            <input name="ranking" type="number" min="1" value="10">
+        </label></p>
+
+        <p><label>Liczba hoteli w rankingu:
+            <input name="ranking_out_of" type="number" min="1" value="100">
+        </label></p>
+        <p><label>Location rating:
+            <input name="location_rating" type="number" min="0" max="5" step="0.1" value="4.5">
+        </label></p>
+
+        <p><label>Rooms rating:
+            <input name="rooms_rating" type="number" min="0" max="5" step="0.1" value="4.4">
+        </label></p>
+
+        <p><label>Service rating:
+            <input name="service_rating" type="number" min="0" max="5" step="0.1" value="4.5">
+        </label></p>
+
+        <p><label>Value rating:
+            <input name="value_rating" type="number" min="0" max="5" step="0.1" value="4.3">
+        </label></p>
+
+        <p><label>Cleanliness rating:
+            <input name="cleanliness_rating" type="number" min="0" max="5" step="0.1" value="4.6">
+        </label></p>
         <button type="submit">Przewidź klaster</button>
     </form>
 
