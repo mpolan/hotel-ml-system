@@ -1,10 +1,10 @@
 from pathlib import Path
 
 CLUSTER_INFO = {
-    0: "dobre, sprawdzone hotele",
-    1: "słabe / problematyczne hotele",
-    2: "przeciętne lub ekonomiczne hotele",
-    3: "wysoko oceniane, ale mało zweryfikowane hotele",
+    0: "Najlepsze i najpopularniejsze hotele",
+    1: "Hotele przeciętne / ekonomiczne",
+    2: "Problematyczne hotele",
+    3: "Dobrze ocenianie, ale mało/niezweryfikowane",
 }
 
 BASE_DIR = Path(__file__).resolve().parents[1]

@@ -2,9 +2,9 @@ import pandas as pd
 import numpy as np
 import joblib
 import json
-from fastapi import FastAPI
-from pydantic import BaseModel
-from typing import Any
+from fastapi import FastAPI, Path, Query
+from pydantic import BaseModel, Field, StringConstraints
+from typing import Annotated, Any
 from sklearn.metrics.pairwise import cosine_similarity
 
 from .config import (
@@ -12,7 +12,6 @@ from .config import (
     CLUSTERS_CSV,
     FEATURE_MEDIANS_PATH,
     FEATURES_FINAL_PATH,
-    HOTELS_CSV,
     KMEANS_MODEL_PATH,
     SCALER_PATH,
     SENTIMENT_MODEL_PATH,
@@ -22,28 +21,32 @@ from .config import (
 
 app = FastAPI()
 
+NonEmptyStr = Annotated[str, StringConstraints(strip_whitespace=True, min_length=1)]
+Rating = Annotated[float, Field(ge=0, le=5)]
+NonNegativeInt = Annotated[int, Field(ge=0)]
+
 
 class HotelInput(BaseModel):
-    name_details: str
+    name_details: NonEmptyStr
 
-    rating: float | None = None
-    num_reviews: int | None = None
+    rating: Rating | None = None
+    num_reviews: NonNegativeInt | None = None
     price_level: str | None = None
 
-    ranking: int | None = None
-    ranking_out_of: int | None = None
+    ranking: Annotated[int, Field(ge=1)] | None = None
+    ranking_out_of: Annotated[int, Field(ge=1)] | None = None
 
-    review_rating_count_1: int | None = None
-    review_rating_count_2: int | None = None
-    review_rating_count_3: int | None = None
-    review_rating_count_4: int | None = None
-    review_rating_count_5: int | None = None
+    review_rating_count_1: NonNegativeInt | None = None
+    review_rating_count_2: NonNegativeInt | None = None
+    review_rating_count_3: NonNegativeInt | None = None
+    review_rating_count_4: NonNegativeInt | None = None
+    review_rating_count_5: NonNegativeInt | None = None
 
-    location_rating: float | None = None
-    rooms_rating: float | None = None
-    service_rating: float | None = None
-    value_rating: float | None = None
-    cleanliness_rating: float | None = None
+    location_rating: Rating | None = None
+    rooms_rating: Rating | None = None
+    service_rating: Rating | None = None
+    value_rating: Rating | None = None
+    cleanliness_rating: Rating | None = None
 
 PRICE_MAPPING = {
     "$": 1,
@@ -53,18 +56,19 @@ PRICE_MAPPING = {
 }
 
 class SentimentInput(BaseModel):
-    review: str
-
-hotels = pd.read_csv(HOTELS_CSV)
+    review: NonEmptyStr
 
 @app.get("/")
 def root():
     return {"message": "API dziala"}
 
+def records_with_none(df: pd.DataFrame) -> list[dict[str, Any]]:
+    return df.astype(object).where(pd.notna(df), None).to_dict(orient="records")
+
+
 @app.get("/clusters")
-def get_clusters(limit: int = 5):
+def get_clusters(limit: Annotated[int, Query(ge=1)] = 5):
     df = pd.read_csv(CLUSTERS_CSV)
-    df = df.replace({np.nan: None})
 
     result = []
 
@@ -102,8 +106,8 @@ def get_clusters(limit: int = 5):
         examples = (
             group[example_cols]
             .head(limit)
-            .to_dict(orient="records")
         )
+        examples = records_with_none(examples)
 
         result.append({
             "cluster": int(cluster_id),
@@ -116,9 +120,8 @@ def get_clusters(limit: int = 5):
     return result
 
 @app.get("/clusters/{cluster_id}")
-def get_all_cluster(cluster_id: int):
+def get_all_cluster(cluster_id: Annotated[int, Path(ge=0)]):
     df = pd.read_csv(CLUSTERS_CSV)
-    df = df.replace({np.nan: None})
 
     group = df[df["cluster"] == cluster_id]
     if group.empty:
@@ -126,8 +129,6 @@ def get_all_cluster(cluster_id: int):
             "error": "Nie znaleziono clustera",
             "cluster": cluster_id
         }
-
-    result = []
 
     summary_cols = [
         "rating",
@@ -159,7 +160,7 @@ def get_all_cluster(cluster_id: int):
         .to_dict()
     )
 
-    hotels = group[hotel_cols].to_dict(orient="records")
+    hotels = records_with_none(group[hotel_cols])
     
     context = {
         "cluster": cluster_id,
@@ -304,86 +305,11 @@ def predict_cluster(hotel: HotelInput):
         )
     }
 
-from data.get_data.tripadvisor_config import BASE_URL, API_KEY
-import requests
-
-def fetch_hotels_search(city: str) -> list[dict]:
-    params = {
-        "key": API_KEY,
-        "searchQuery": city,
-        "category": "hotels",
-        "language": "en",
-    }
-
-    response = requests.get(
-        f"{BASE_URL}/location/search",
-        params=params,
-        headers={"accept": "application/json"},
-    )
-
-    response_json = response.json()
-    data = response_json.get("data", response_json)
-
-    if not data:
-        print(f"Brak danych dla {city}: {response_json}")
-
-    for item in data:
-        item["query_city"] = city
-
-    return data
-
-def fetch_hotel_details(location_id: str) -> dict:
-    params = {
-        "key": API_KEY,
-        "language": "en",
-        "currency": "USD",
-    }
-
-    response = requests.get(
-        f"{BASE_URL}/location/{location_id}/details",
-        params=params,
-        headers={"accept": "application/json"},
-    )
-
-    response_json = response.json()
-    data = response_json.get("data", response_json)
-
-    return data
-
-def merge_hotel_data(search_item: dict, details: dict, city: str) -> dict:
-    return {
-        "search": search_item,
-        "details": details,
-        "query_city": city,
-    }
-
-@app.get("/get_hotels/{city}")
-def get_hotels_from_city(city: str, limit: int = 10):
-    search_data = fetch_hotels_search(city)
-
-    hotels = []
-
-    for item in search_data[:limit]:
-        location_id = item.get("location_id")
-
-        if not location_id:
-            continue
-
-        details = fetch_hotel_details(location_id)
-
-        hotels.append(
-            merge_hotel_data(item, details, city)
-        )
-
-    return {
-        "city": city,
-        "count": len(hotels),
-        "hotels": hotels,
-    }
-
-    
 @app.get("/recommend/{location_id}")
-def recomend_hotels(location_id: int, limit: int = 5):
+def recommend_hotels(
+    location_id: Annotated[int, Path(ge=1)],
+    limit: Annotated[int, Query(ge=1)] = 5,
+):
     hotel_idx = None
 
     for idx, hotel in enumerate(tfidf_hotels):
@@ -436,8 +362,17 @@ def recomend_hotels(location_id: int, limit: int = 5):
     return context
 
 @app.get("/search-hotels")
-def search_hotels(query: str, limit: int = 5):
+def search_hotels(
+    query: str,
+    limit: Annotated[int, Query(ge=1)] = 5,
+):
     q = tfidf_vectorizer.transform([query])
+
+    if q.nnz == 0:
+        return {
+            "query": query,
+            "results": [],
+        }
 
     scores = cosine_similarity(q, tfidf_matrix).flatten()
     best_indices = scores.argsort()[::-1][:limit]
