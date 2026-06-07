@@ -4,7 +4,7 @@ CLUSTER_INFO = {
     0: "Najlepsze i najpopularniejsze hotele",
     1: "Hotele przeciętne / ekonomiczne",
     2: "Problematyczne hotele",
-    3: "Dobrze ocenianie, ale mało/niezweryfikowane",
+    3: "Hotele bez wystarczającej liczby opinii",
 }
 
 BASE_DIR = Path(__file__).resolve().parents[1]

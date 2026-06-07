@@ -1,0 +1,151 @@
+location_id,name,address_obj.city,address_obj.state
+278399,Hotel Cristal Bialystok,Bialystok,Podlaskie Province
+10050636,Ibis Styles Bialystok,Bialystok,Podlaskie Province
+23643711,Hampton by Hilton Bialystok,Bialystok,Podlaskie Province
+21356073,Mercure Bialystok,Bialystok,Podlaskie Province
+23247934,Hostel Bialystok Centrum,Bialystok,Podlaskie Province
+15857328,Apartamenty Bialystok - Lipowa 12,Bialystok,Podlaskie Province
+641571,Hotel Branicki,Bialystok,Podlaskie Province
+11680364,Royal Hotel & Spa,Bialystok,Podlaskie Province
+17678224,Wynajem Pokoi Bialystok,Bialystok,Podlaskie Province
+528501,Golebiewski Hotel,Bialystok,Podlaskie Province
+275049,Novotel Warszawa Centrum,Warsaw,Mazovia Province
+15519965,Hotel Warszawa,Warsaw,Mazovia Province
+15751681,PURO Warszawa Centrum,Warsaw,Mazovia Province
+275042,Mercure Warszawa Centrum,Warsaw,Mazovia Province
+277373,Novotel Warszawa Airport,Warsaw,Mazovia Province
+596818,Hotel Warszawa,Augustow,Podlaskie Province
+275044,Ibis Warszawa Centrum,Warsaw,Mazovia Province
+2590182,ibis Warszawa Reduta,Warsaw,Mazovia Province
+1460887,Ibis Budget Warszawa Centrum,Warsaw,Mazovia Province
+275064,Hotel Gromada Warszawa Centrum,Warsaw,Mazovia Province
+14040909,PURO Krakow Kazimierz,Krakow,Lesser Poland Province
+321158,Sheraton Grand Krakow,Krakow,Lesser Poland Province
+9884047,Hotel Mercure Krakow Stare Miasto,Krakow,Lesser Poland Province
+12393367,Wyndham Grand Krakow Old Town,Krakow,Lesser Poland Province
+23391245,Ac Hotel Krakow,Krakow,Lesser Poland Province
+609368,Qubus Hotel Krakow,Krakow,Lesser Poland Province
+4176964,PURO Krakow Stare Miasto,Krakow,Lesser Poland Province
+1728175,Hilton Garden Inn Krakow,Krakow,Lesser Poland Province
+277359,Radisson Blu Hotel Krakow,Krakow,Lesser Poland Province
+277358,Novotel Krakow Centrum,Krakow,Lesser Poland Province
+277649,Novotel Katowice Centrum,Katowice,Silesia Province
+14967747,Moxy Katowice Airport,Pyrzowice,Silesia Province
+1654292,Vienna House Easy by Wyndham Katowice,Katowice,Silesia Province
+1400018,ibis Budget Katowice Centrum,Katowice,Silesia Province
+12167331,Q Hotel Plus Katowice,Katowice,Silesia Province
+23417081,Mercure Katowice Centrum,Katowice,Silesia Province
+502269,Campanile Katowice,Katowice,Silesia Province
+1723757,Park Inn by Radisson Katowice,Katowice,Silesia Province
+12246671,Courtyard by Marriott Katowice City Center,Katowice,Silesia Province
+286780,Hotel Diament Plaza Katowice,Katowice,Silesia Province
+6664499,Puro Hotel Poznan Stare Miasto,Poznan,Greater Poland Province
+626806,Sheraton Poznan Hotel,Poznan,Greater Poland Province
+1072730,NH Poznan,Poznan,Greater Poland Province
+275079,Mercure Poznan Centrum,Poznan,Greater Poland Province
+275076,Novotel Poznan Centrum,Poznan,Greater Poland Province
+14989391,Park Inn by Radisson Poznan,Poznan,Greater Poland Province
+15243198,Hampton By Hilton Poznan Old Town,Poznan,Greater Poland Province
+652453,"Andersia Hotel & Spa Poznan, A Member Of Radisson Individuals",Poznan,Greater Poland Province
+275077,Novotel Poznan Malta,Poznan,Greater Poland Province
+14958792,Ibis Poznan Centrum,Poznan,Greater Poland Province
+277656,Mercure Gdynia Centrum,Gdynia,Pomerania Province
+7780556,Courtyard by Marriott Gdynia Waterfront,Gdynia,Pomerania Province
+6998708,Gdynia Centrum,Gdynia,Pomerania Province
+26308453,Square Apartments Gdynia,Gdynia,Pomerania Province
+23518362,My Story Gdynia Hotel,Gdynia,Pomerania Province
+2441127,Stacja Nowa Gdynia,Lodz,Lodz Province
+21250030,BP Hostel Gdynia,Gdynia,Pomerania Province
+953906,Villa Gdynia,Gdynia,Pomerania Province
+4888442,Hotel Business Faltom Gdynia,Gdynia,Pomerania Province
+7710716,Kamienica Morska Gdynia,Gdynia,Pomerania Province
+7394519,PURO Gdansk Stare Miasto,Gdansk,Pomerania Province
+1754683,Hilton Gdansk,Gdansk,Pomerania Province
+275087,Scandic Gdansk,Gdansk,Pomerania Province
+779781,"Radisson Blu Hotel, Gdansk",Gdansk,Pomerania Province
+14055281,B&B HOTEL Gdansk Old Town,Gdansk,Pomerania Province
+14167696,Hampton by Hilton Gdansk Old Town,Gdansk,Pomerania Province
+15676982,Radisson Hotel & Apartments Gdansk,Gdansk,Pomerania Province
+277647,Novotel Gdansk Centrum,Gdansk,Pomerania Province
+1109745,Hotel Gdansk Boutique,Gdansk,Pomerania Province
+16830226,Holiday Inn Gdansk - City Centre By IHG,Gdansk,Pomerania Province
+275085,Sofitel Grand Sopot,Sopot,Pomerania Province
+1015711,Sheraton Sopot Hotel,Sopot,Pomerania Province
+20935494,"Radisson Blu Hotel, Sopot",Sopot,Pomerania Province
+2508570,Sopot Marriott Resort & Spa,Sopot,Pomerania Province
+10470842,Hotel Sopot,Sopot,Pomerania Province
+285471,Rezydent Sopot MGallery Hotel Collection,Sopot,Pomerania Province
+651618,Hotel Aqua Sopot Family & Friends,Sopot,Pomerania Province
+2269524,Mala Anglia - Boutique Apartments Sopot,Sopot,Pomerania Province
+1519907,Bayjonn Hotel Sopot,Sopot,Pomerania Province
+13228421,Focus Hotel Premium Sopot,Sopot,Pomerania Province
+3343284,Copernicus Torun Hotel,Torun,Kuyavia-Pomerania Province
+275082,Mercure Torun Centrum,Torun,Kuyavia-Pomerania Province
+1458515,Hotel Solaris Torun,Torun,Kuyavia-Pomerania Province
+1757685,Ibis Budget Torun,Torun,Kuyavia-Pomerania Province
+1462729,Halo Torun,Torun,Kuyavia-Pomerania Province
+1885452,B&B Hotel Torun,Torun,Kuyavia-Pomerania Province
+12431905,Hotel Nicolaus,Torun,Kuyavia-Pomerania Province
+287051,Hotel Gromada Torun,Torun,Kuyavia-Pomerania Province
+3156049,Hotel Torun Istanbul Old City,Istanbul,
+2254821,Hotel Przystanek Torun,Torun,Kuyavia-Pomerania Province
+7179861,Hotel Mercure Bydgoszcz Sepia,Bydgoszcz,Kuyavia-Pomerania Province
+4427782,Hotel Campanile Bydgoszcz,Bydgoszcz,Kuyavia-Pomerania Province
+528494,City Hotel Bydgoszcz,Bydgoszcz,Kuyavia-Pomerania Province
+4603321,Przystan Bydgoszcz,Bydgoszcz,Kuyavia-Pomerania Province
+528365,Hotel Focus Bydgoszcz,Bydgoszcz,Kuyavia-Pomerania Province
+24923696,Focus Hotel Premium Bydgoszcz,Bydgoszcz,Kuyavia-Pomerania Province
+23495914,Rezydencja Sowa,Bydgoszcz,Kuyavia-Pomerania Province
+3595685,Apartments Dream of Bydgoszcz,Bydgoszcz,Kuyavia-Pomerania Province
+19896334,Apartamenty Sowa Bydgoszcz,Bydgoszcz,Kuyavia-Pomerania Province
+5323609,Noclegi Bydgoszcz - Centrum Onkologii,Bydgoszcz,Kuyavia-Pomerania Province
+17338497,The Bridge Wroclaw MGallery,Wroclaw,Lower Silesia Province
+2082637,PURO Wroclaw Stare Miasto,Wroclaw,Lower Silesia Province
+277626,Novotel Wroclaw Centrum,Wroclaw,Lower Silesia Province
+277622,Scandic Wroclaw,Wroclaw,Lower Silesia Province
+10267423,DoubleTree by Hilton Wroclaw,Wroclaw,Lower Silesia Province
+277623,Hotel Mercure Wroclaw Centrum,Wroclaw,Lower Silesia Province
+277624,Novotel Wroclaw City,Wroclaw,Lower Silesia Province
+12553141,Ac Hotel Wroclaw,Wroclaw,Lower Silesia Province
+9763242,ibis Wroclaw Centrum,Wroclaw,Lower Silesia Province
+284634,Qubus Hotel Wroclaw,Wroclaw,Lower Silesia Province
+4011143,Hotel Great Polonia Velvet Suwalki,Suwalki,Podlaskie Province
+10782794,Suwalki Centrum Pokoje,Suwalki,Podlaskie Province
+8387269,Hotel Loft 1898,Suwalki,Podlaskie Province
+4557505,Hancza Hotel,Suwalki,Podlaskie Province
+4932574,Akvilon Hotel,Suwalki,Podlaskie Province
+5521691,Hotel Szyszko,Suwalki,Podlaskie Province
+2489753,Folwark Hutta,Suwalki,Podlaskie Province
+1776883,Gosciniec Jaczno,Suwalki,Podlaskie Province
+4579828,Hotel Nad Wigrami,Suwalki,Podlaskie Province
+3485588,Logos Hotel,Suwalki,Podlaskie Province
+20088530,Bachleda Resort Zakopane,Zakopane,Lesser Poland Province
+17165609,"Radisson Blu Hotel & Residences, Zakopane",Zakopane,Lesser Poland Province
+9808341,Hotel Logos Zakopane,Zakopane,Lesser Poland Province
+7332037,Aries Hotel & Spa Zakopane,Zakopane,Lesser Poland Province
+277663,Bachleda Hotel Kasprowy,Zakopane,Lesser Poland Province
+1743726,Apartamenty ApartArt Zakopane,Zakopane,Lesser Poland Province
+12000203,VILLA NOSAL - Zakopane,Zakopane,Lesser Poland Province
+21164553,APARTHOTEL ROYAL RESORT SPA Zakopane,Zakopane,Lesser Poland Province
+505389,Hotel Gromada Zakopane,Zakopane,Lesser Poland Province
+8704659,Lipowy Dwor Zakopane,Zakopane,Lesser Poland Province
+17634606,Hampton By Hilton Kalisz,Kalisz,Greater Poland Province
+3645102,Hotel Villa Stary Kalisz,Kalisz,Greater Poland Province
+17649381,Metropolis Apartamenty Kalisz Centrum,Kalisz,Greater Poland Province
+23256665,Apartament Kalisz,Kalisz,Greater Poland Province
+624748,Hotel Europa,Kalisz,Greater Poland Province
+7625450,Komoda Club Residence,Kalisz,Greater Poland Province
+1757360,Hotel Calisia,Kalisz,Greater Poland Province
+10749305,Lantaarn Pension,Kalisz Pomorski,Western Pomerania Province
+1735518,Hotel Seven,Kalisz,Greater Poland Province
+2453154,Solaris Lupus,Kalisz Pomorski,Western Pomerania Province
+1729285,Nad Pisa,Pisz,Warmia-Masuria Province
+2482444,Hotel Joseph Conrad,Pisz,Warmia-Masuria Province
+6523226,Zlota Lania Wiartel Resort & SPA,Pisz,Warmia-Masuria Province
+2160071,Hotel Ros,Pisz,Warmia-Masuria Province
+1507917,Kaliszki Manor,Pisz,Warmia-Masuria Province
+11622060,Wrota Mazur,Pisz,Warmia-Masuria Province
+7103076,Zajazd Wiejski,Pisz,Warmia-Masuria Province
+7092317,Karwik 122,Pisz,Warmia-Masuria Province
+6583918,Galindia Refugia,Pisz,Warmia-Masuria Province
+8342267,Azuria Agroturystyka,Pisz,Warmia-Masuria Province

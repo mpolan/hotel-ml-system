@@ -165,6 +165,11 @@ def ui():
         </p>
         <p><label>Pozycja w rankingu: <input name="ranking" type="number" min="1"></label></p>
         <p><label>Liczba hoteli w rankingu: <input name="ranking_out_of" type="number" min="1"></label></p>
+        <p><label>Location rating: <input name="location_rating" type="number" min="0" max="5" step="0.1"></label></p>
+        <p><label>Rooms rating: <input name="rooms_rating" type="number" min="0" max="5" step="0.1"></label></p>
+        <p><label>Service rating: <input name="service_rating" type="number" min="0" max="5" step="0.1"></label></p>
+        <p><label>Value rating: <input name="value_rating" type="number" min="0" max="5" step="0.1"></label></p>
+        <p><label>Cleanliness rating: <input name="cleanliness_rating" type="number" min="0" max="5" step="0.1"></label></p>
         <button type="submit">Przewidź klaster</button>
     </form>
 
@@ -235,13 +240,18 @@ def ui():
                 method: "POST",
                 headers: {"Content-Type": "application/json"},
                 body: JSON.stringify({
-                    name_details: data.get("name_details"),
-                    rating: optionalNumber(data, "rating"),
-                    num_reviews: optionalNumber(data, "num_reviews"),
-                    price_level: data.get("price_level") || null,
-                    ranking: optionalNumber(data, "ranking"),
-                    ranking_out_of: optionalNumber(data, "ranking_out_of")
-                })
+                name_details: data.get("name_details"),
+                rating: optionalNumber(data, "rating"),
+                num_reviews: optionalNumber(data, "num_reviews"),
+                price_level: data.get("price_level") || null,
+                ranking: optionalNumber(data, "ranking"),
+                ranking_out_of: optionalNumber(data, "ranking_out_of"),
+                location_rating: optionalNumber(data, "location_rating"),
+                rooms_rating: optionalNumber(data, "rooms_rating"),
+                service_rating: optionalNumber(data, "service_rating"),
+                value_rating: optionalNumber(data, "value_rating"),
+                cleanliness_rating: optionalNumber(data, "cleanliness_rating")
+            })
             });
         });
     </script>
