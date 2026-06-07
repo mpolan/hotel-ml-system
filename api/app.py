@@ -3,6 +3,7 @@ import numpy as np
 import joblib
 import json
 from fastapi import FastAPI, Path, Query
+from fastapi.responses import HTMLResponse
 from pydantic import BaseModel, Field, StringConstraints
 from typing import Annotated, Any
 from sklearn.metrics.pairwise import cosine_similarity
@@ -61,6 +62,193 @@ class SentimentInput(BaseModel):
 @app.get("/")
 def root():
     return {"message": "API dziala"}
+
+
+@app.get("/ui", response_class=HTMLResponse)
+def ui():
+    return """
+<!doctype html>
+<html lang="pl">
+<head>
+    <meta charset="utf-8">
+    <title>Hotel Analytics ML</title>
+</head>
+<body>
+    <h1>Hotel Analytics ML</h1>
+    <p>Prosty interfejs do testowania modeli działających na lokalnych danych.</p>
+    <p><a href="/docs">Dokumentacja API</a></p>
+
+    <hr>
+
+    <h2>Klastry</h2>
+    <button type="button" onclick="loadClusters()">Pokaż klastry</button>
+
+    <form id="cluster-details-form">
+        <p>
+            <label>
+                ID klastra:
+                <input name="cluster_id" type="number" min="0" value="0" required>
+            </label>
+            <button type="submit">Pokaż hotele klastra</button>
+        </p>
+    </form>
+
+    <hr>
+
+    <h2>Rekomendacje hotelu</h2>
+    <form id="recommend-form">
+        <p>
+            <label>
+                Location ID:
+                <input name="location_id" type="number" min="1" value="278399" required>
+            </label>
+        </p>
+        <p>
+            <label>
+                Limit:
+                <input name="limit" type="number" min="1" value="5" required>
+            </label>
+        </p>
+        <button type="submit">Pokaż rekomendacje</button>
+    </form>
+
+    <hr>
+
+    <h2>Wyszukiwanie hoteli</h2>
+    <form id="search-form">
+        <p>
+            <label>
+                Zapytanie:
+                <input name="query" value="free internet" required>
+            </label>
+        </p>
+        <p>
+            <label>
+                Limit:
+                <input name="limit" type="number" min="1" value="5" required>
+            </label>
+        </p>
+        <button type="submit">Szukaj</button>
+    </form>
+
+    <hr>
+
+    <h2>Klasyfikacja opinii</h2>
+    <form id="sentiment-form">
+        <p>
+            <label>
+                Opinia:
+                <textarea name="review" rows="4" cols="60" required>Great clean hotel and helpful staff</textarea>
+            </label>
+        </p>
+        <button type="submit">Sprawdź sentyment</button>
+    </form>
+
+    <hr>
+
+    <h2>Predykcja klastra hotelu</h2>
+    <form id="predict-cluster-form">
+        <p><label>Nazwa: <input name="name_details" required></label></p>
+        <p><label>Ocena 0-5: <input name="rating" type="number" min="0" max="5" step="0.1"></label></p>
+        <p><label>Liczba opinii: <input name="num_reviews" type="number" min="0"></label></p>
+        <p>
+            <label>
+                Poziom cen:
+                <select name="price_level">
+                    <option value="">Brak danych</option>
+                    <option value="$">$</option>
+                    <option value="$$">$$</option>
+                    <option value="$$$">$$$</option>
+                    <option value="$$$$">$$$$</option>
+                </select>
+            </label>
+        </p>
+        <p><label>Pozycja w rankingu: <input name="ranking" type="number" min="1"></label></p>
+        <p><label>Liczba hoteli w rankingu: <input name="ranking_out_of" type="number" min="1"></label></p>
+        <button type="submit">Przewidź klaster</button>
+    </form>
+
+    <hr>
+
+    <h2>Wynik</h2>
+    <pre id="result">Wybierz operację.</pre>
+
+    <script>
+        const result = document.getElementById("result");
+
+        function show(data) {
+            result.textContent = JSON.stringify(data, null, 2);
+        }
+
+        async function request(url, options) {
+            try {
+                const response = await fetch(url, options);
+                const data = await response.json();
+                show(data);
+            } catch (error) {
+                show({error: String(error)});
+            }
+        }
+
+        function optionalNumber(formData, name) {
+            const value = formData.get(name);
+            return value === "" ? null : Number(value);
+        }
+
+        function loadClusters() {
+            request("/clusters");
+        }
+
+        document.getElementById("cluster-details-form").addEventListener("submit", event => {
+            event.preventDefault();
+            const data = new FormData(event.target);
+            request(`/clusters/${data.get("cluster_id")}`);
+        });
+
+        document.getElementById("recommend-form").addEventListener("submit", event => {
+            event.preventDefault();
+            const data = new FormData(event.target);
+            request(`/recommend/${data.get("location_id")}?limit=${data.get("limit")}`);
+        });
+
+        document.getElementById("search-form").addEventListener("submit", event => {
+            event.preventDefault();
+            const data = new FormData(event.target);
+            const query = encodeURIComponent(data.get("query"));
+            request(`/search-hotels?query=${query}&limit=${data.get("limit")}`);
+        });
+
+        document.getElementById("sentiment-form").addEventListener("submit", event => {
+            event.preventDefault();
+            const data = new FormData(event.target);
+            request("/predict-sentiment", {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({review: data.get("review")})
+            });
+        });
+
+        document.getElementById("predict-cluster-form").addEventListener("submit", event => {
+            event.preventDefault();
+            const data = new FormData(event.target);
+            request("/predict-cluster", {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({
+                    name_details: data.get("name_details"),
+                    rating: optionalNumber(data, "rating"),
+                    num_reviews: optionalNumber(data, "num_reviews"),
+                    price_level: data.get("price_level") || null,
+                    ranking: optionalNumber(data, "ranking"),
+                    ranking_out_of: optionalNumber(data, "ranking_out_of")
+                })
+            });
+        });
+    </script>
+</body>
+</html>
+"""
+
 
 def records_with_none(df: pd.DataFrame) -> list[dict[str, Any]]:
     return df.astype(object).where(pd.notna(df), None).to_dict(orient="records")

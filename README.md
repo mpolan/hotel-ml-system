@@ -107,6 +107,7 @@ FastAPI udostępnia modele działające wyłącznie na lokalnych danych i artefa
 | Metoda | Endpoint | Opis |
 |---|---|---|
 | `GET` | `/` | Sprawdzenie działania API |
+| `GET` | `/ui` | Minimalny interfejs HTML do testowania modeli |
 | `GET` | `/clusters` | Lista klastrów z podsumowaniami |
 | `GET` | `/clusters/{cluster_id}` | Hotele należące do wybranego klastra |
 | `POST` | `/predict-cluster` | Predykcja klastra dla nowych danych hotelu |
@@ -132,6 +133,12 @@ Dokumentacja i możliwość testowania endpointów:
 
 ```text
 http://127.0.0.1:8000/docs
+```
+
+Minimalny interfejs użytkownika:
+
+```text
+http://127.0.0.1:8000/ui
 ```
 
 Przykładowe zapytania:
