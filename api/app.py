@@ -2,8 +2,11 @@ import pandas as pd
 import numpy as np
 import joblib
 import json
-from fastapi import FastAPI, Path, Query
+from pathlib import Path as FilePath
+from fastapi import FastAPI, Path, Query, Request
 from fastapi.responses import HTMLResponse
+from fastapi.staticfiles import StaticFiles
+from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel, Field, StringConstraints
 from typing import Annotated, Any
 from sklearn.metrics.pairwise import cosine_similarity
@@ -21,6 +24,10 @@ from .config import (
 
 
 app = FastAPI()
+
+API_DIR = FilePath(__file__).resolve().parent
+templates = Jinja2Templates(directory=str(API_DIR / "templates"))
+app.mount("/static", StaticFiles(directory=str(API_DIR / "static")), name="static")
 
 NonEmptyStr = Annotated[str, StringConstraints(strip_whitespace=True, min_length=1)]
 Rating = Annotated[float, Field(ge=0, le=5)]
@@ -65,247 +72,28 @@ def root():
 
 
 @app.get("/ui", response_class=HTMLResponse)
-def ui():
-    return """
-<!doctype html>
-<html lang="pl">
-<head>
-    <meta charset="utf-8">
-    <title>Hotel Analytics ML</title>
-</head>
-<body>
-    <h1>Hotel Analytics ML</h1>
-    <p><a href="/docs">FastAPI docs</a></p>
+def ui(request: Request):
+    return templates.TemplateResponse(request=request, name="index.html")
 
-    <hr>
 
-    <h2>Klastry</h2>
-    <button type="button" onclick="loadClusters()">Pokaż klastry</button>
+@app.get("/ui/clusters", response_class=HTMLResponse)
+def ui_clusters(request: Request):
+    return templates.TemplateResponse(request=request, name="clusters.html")
 
-    <form id="cluster-details-form">
-        <p>
-            <label>
-                ID klastra:
-                <input name="cluster_id" type="number" min="0" value="0" required>
-            </label>
-            <button type="submit">Pokaż hotele klastra</button>
-        </p>
-    </form>
 
-    <hr>
+@app.get("/ui/recommendations", response_class=HTMLResponse)
+def ui_recommendations(request: Request):
+    return templates.TemplateResponse(request=request, name="recommendations.html")
 
-    <h2>Rekomendacje hotelu</h2>
-    <form id="recommend-form">
-        <p>
-            <label>
-                Location ID:
-                <input name="location_id" type="number" min="1" value="278399" required>
-            </label>
-        </p>
-        <p>
-            <label>
-                Limit:
-                <input name="limit" type="number" min="1" value="5" required>
-            </label>
-        </p>
-        <button type="submit">Pokaż rekomendacje</button>
-    </form>
 
-    <hr>
+@app.get("/ui/sentiment", response_class=HTMLResponse)
+def ui_sentiment(request: Request):
+    return templates.TemplateResponse(request=request, name="sentiment.html")
 
-    <h2>Wyszukiwanie hoteli</h2>
-    <form id="search-form">
-        <p>
-            <label>
-                Zapytanie:
-                <input name="query" value="free internet" required>
-            </label>
-        </p>
-        <p>
-            <label>
-                Limit:
-                <input name="limit" type="number" min="1" value="5" required>
-            </label>
-        </p>
-        <button type="submit">Szukaj</button>
-    </form>
 
-    <hr>
-
-    <h2>Klasyfikacja opinii</h2>
-    <form id="sentiment-form">
-        <p>
-            <label>
-                Opinia:
-                <textarea name="review" rows="4" cols="60" required>Great clean hotel and helpful staff</textarea>
-            </label>
-        </p>
-        <button type="submit">Sprawdź sentyment</button>
-    </form>
-
-    <hr>
-
-    <h2>Predykcja klastra hotelu</h2>
-    <form id="predict-cluster-form">
-        <p><label>Nazwa: <input name="name_details" value="Test Hotel" required></label></p>
-
-        <p><label>Ocena 0-5:
-            <input name="rating" type="number" min="0" max="5" step="0.1" value="4.4">
-        </label></p>
-
-        <p><label>Liczba opinii:
-            <input name="num_reviews" type="number" min="0" value="150">
-        </label></p>
-        <p>
-            <label>
-                Poziom cen:
-                <select name="price_level">
-                    <option value="">Brak danych</option>
-                    <option value="$">$</option>
-                    <option value="$$">$$</option>
-                    <option value="$$$">$$$</option>
-                    <option value="$$$$">$$$$</option>
-                </select>
-            </label>
-        </p>
-        <p><label>Pozycja w rankingu:
-            <input name="ranking" type="number" min="1" value="10">
-        </label></p>
-
-        <p><label>Liczba hoteli w rankingu:
-            <input name="ranking_out_of" type="number" min="1" value="100">
-        </label></p>
-        <p><label>Location rating:
-            <input name="location_rating" type="number" min="0" max="5" step="0.1" value="4.5">
-        </label></p>
-
-        <p><label>Rooms rating:
-            <input name="rooms_rating" type="number" min="0" max="5" step="0.1" value="4.4">
-        </label></p>
-
-        <p><label>Service rating:
-            <input name="service_rating" type="number" min="0" max="5" step="0.1" value="4.5">
-        </label></p>
-
-        <p><label>Value rating:
-            <input name="value_rating" type="number" min="0" max="5" step="0.1" value="4.3">
-        </label></p>
-
-        <p><label>Cleanliness rating:
-            <input name="cleanliness_rating" type="number" min="0" max="5" step="0.1" value="4.6">
-        </label></p>
-        <p><label>Liczba ocen 1:
-            <input name="review_rating_count_1" type="number" min="0" value="5">
-        </label></p>
-
-        <p><label>Liczba ocen 2:
-            <input name="review_rating_count_2" type="number" min="0" value="5">
-        </label></p>
-
-        <p><label>Liczba ocen 3:
-            <input name="review_rating_count_3" type="number" min="0" value="20">
-        </label></p>
-
-        <p><label>Liczba ocen 4:
-            <input name="review_rating_count_4" type="number" min="0" value="50">
-        </label></p>
-
-        <p><label>Liczba ocen 5:
-            <input name="review_rating_count_5" type="number" min="0" value="70">
-        </label></p>
-        <button type="submit">Przewidź klaster</button>
-    </form>
-
-    <hr>
-
-    <h2>Wynik</h2>
-    <pre id="result">Wybierz operację.</pre>
-
-    <script>
-        const result = document.getElementById("result");
-
-        function show(data) {
-            result.textContent = JSON.stringify(data, null, 2);
-        }
-
-        async function request(url, options) {
-            try {
-                const response = await fetch(url, options);
-                const data = await response.json();
-                show(data);
-            } catch (error) {
-                show({error: String(error)});
-            }
-        }
-
-        function optionalNumber(formData, name) {
-            const value = formData.get(name);
-            return value === "" ? null : Number(value);
-        }
-
-        function loadClusters() {
-            request("/clusters");
-        }
-
-        document.getElementById("cluster-details-form").addEventListener("submit", event => {
-            event.preventDefault();
-            const data = new FormData(event.target);
-            request(`/clusters/${data.get("cluster_id")}`);
-        });
-
-        document.getElementById("recommend-form").addEventListener("submit", event => {
-            event.preventDefault();
-            const data = new FormData(event.target);
-            request(`/recommend/${data.get("location_id")}?limit=${data.get("limit")}`);
-        });
-
-        document.getElementById("search-form").addEventListener("submit", event => {
-            event.preventDefault();
-            const data = new FormData(event.target);
-            const query = encodeURIComponent(data.get("query"));
-            request(`/search-hotels?query=${query}&limit=${data.get("limit")}`);
-        });
-
-        document.getElementById("sentiment-form").addEventListener("submit", event => {
-            event.preventDefault();
-            const data = new FormData(event.target);
-            request("/predict-sentiment", {
-                method: "POST",
-                headers: {"Content-Type": "application/json"},
-                body: JSON.stringify({review: data.get("review")})
-            });
-        });
-
-        document.getElementById("predict-cluster-form").addEventListener("submit", event => {
-            event.preventDefault();
-            const data = new FormData(event.target);
-            request("/predict-cluster", {
-                method: "POST",
-                headers: {"Content-Type": "application/json"},
-                body: JSON.stringify({
-                name_details: data.get("name_details"),
-                rating: optionalNumber(data, "rating"),
-                num_reviews: optionalNumber(data, "num_reviews"),
-                price_level: data.get("price_level") || null,
-                ranking: optionalNumber(data, "ranking"),
-                ranking_out_of: optionalNumber(data, "ranking_out_of"),
-                location_rating: optionalNumber(data, "location_rating"),
-                rooms_rating: optionalNumber(data, "rooms_rating"),
-                service_rating: optionalNumber(data, "service_rating"),
-                value_rating: optionalNumber(data, "value_rating"),
-                cleanliness_rating: optionalNumber(data, "cleanliness_rating"),
-                review_rating_count_1: optionalNumber(data, "review_rating_count_1"),
-                review_rating_count_2: optionalNumber(data, "review_rating_count_2"),
-                review_rating_count_3: optionalNumber(data, "review_rating_count_3"),
-                review_rating_count_4: optionalNumber(data, "review_rating_count_4"),
-                review_rating_count_5: optionalNumber(data, "review_rating_count_5"),
-            })
-            });
-        });
-    </script>
-</body>
-</html>
-"""
+@app.get("/ui/predict-cluster", response_class=HTMLResponse)
+def ui_predict_cluster(request: Request):
+    return templates.TemplateResponse(request=request, name="predict_cluster.html")
 
 
 def records_with_none(df: pd.DataFrame) -> list[dict[str, Any]]:

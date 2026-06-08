@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}Rekomendacje · Hotel Analytics ML{% endblock %}
+{% block content %}
+<section class="page-header"><div class="container"><span class="eyebrow">Odkrywanie hoteli</span><h1>Rekomendacje i wyszukiwanie</h1><p>Znajdź podobne obiekty lub wyszukaj hotele za pomocą opisu.</p></div></section>
+<div class="container py-4">
+    <section id="recommendations" class="card form-card mb-4"><div class="card-body p-4"><h2 class="h4 mb-3">Rekomendacje dla hotelu</h2>
+        <form id="recommend-form" class="row g-3 align-items-end">
+            <div class="col-md-6"><label class="form-label" for="location_id">Location ID</label><input class="form-control" id="location_id" name="location_id" type="number" min="1" value="278399" required></div>
+            <div class="col-md-3"><label class="form-label" for="recommend_limit">Limit</label><input class="form-control" id="recommend_limit" name="limit" type="number" min="1" value="5" required></div>
+            <div class="col-md-3"><button class="btn btn-primary w-100" type="submit">Pokaż rekomendacje</button></div>
+        </form>
+    </div></section>
+    <div id="recommend-result" class="results-region mb-5"></div>
+    <section id="search" class="card form-card mb-4"><div class="card-body p-4"><h2 class="h4 mb-3">Wyszukiwanie hoteli</h2>
+        <form id="search-form" class="row g-3 align-items-end">
+            <div class="col-md-6"><label class="form-label" for="query">Zapytanie</label><input class="form-control" id="query" name="query" value="free internet" required></div>
+            <div class="col-md-3"><label class="form-label" for="search_limit">Limit</label><input class="form-control" id="search_limit" name="limit" type="number" min="1" value="5" required></div>
+            <div class="col-md-3"><button class="btn btn-outline-primary w-100" type="submit">Szukaj</button></div>
+        </form>
+    </div></section>
+    <div id="search-result" class="results-region"></div>
+</div>
+{% endblock %}

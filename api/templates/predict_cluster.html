@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Predykcja klastra · Hotel Analytics ML{% endblock %}
+{% block content %}
+<section class="page-header"><div class="container"><span class="eyebrow">Predykcja</span><h1>Klaster nowego hotelu</h1><p>Uzupełnij znane dane. Brakujące wartości zostaną zastąpione medianami treningowymi.</p></div></section>
+<div class="container py-4">
+    <form id="predict-cluster-form" class="card form-card mb-4"><div class="card-body p-4">
+        <h2 class="h5 mb-3">Podstawowe informacje</h2>
+        <div class="row g-3 mb-4">
+            <div class="col-md-6"><label class="form-label">Nazwa hotelu</label><input class="form-control" name="name_details" value="Test Hotel" required></div>
+            <div class="col-md-2"><label class="form-label">Ocena</label><input class="form-control" name="rating" type="number" min="0" max="5" step="0.1" value="4.4"></div>
+            <div class="col-md-2"><label class="form-label">Liczba opinii</label><input class="form-control" name="num_reviews" type="number" min="0" value="150"></div>
+            <div class="col-md-2"><label class="form-label">Poziom cen</label><select class="form-select" name="price_level"><option value="">Brak danych</option><option>$</option><option>$$</option><option>$$$</option><option>$$$$</option></select></div>
+            <div class="col-md-3"><label class="form-label">Pozycja w rankingu</label><input class="form-control" name="ranking" type="number" min="1" value="10"></div>
+            <div class="col-md-3"><label class="form-label">Liczba hoteli w rankingu</label><input class="form-control" name="ranking_out_of" type="number" min="1" value="100"></div>
+        </div>
+        <h2 class="h5 mb-3">Oceny szczegółowe</h2>
+        <div class="row g-3 mb-4">
+            {% for name, label, value in [("location_rating", "Lokalizacja", "4.5"), ("rooms_rating", "Pokoje", "4.4"), ("service_rating", "Obsługa", "4.5"), ("value_rating", "Stosunek jakości do ceny", "4.3"), ("cleanliness_rating", "Czystość", "4.6")] %}
+            <div class="col-md"><label class="form-label">{{ label }}</label><input class="form-control" name="{{ name }}" type="number" min="0" max="5" step="0.1" value="{{ value }}"></div>
+            {% endfor %}
+        </div>
+        <h2 class="h5 mb-3">Rozkład ocen</h2>
+        <div class="row g-3 mb-4">
+            {% for rating, value in [(1, 5), (2, 5), (3, 20), (4, 50), (5, 70)] %}
+            <div class="col-md"><label class="form-label">Liczba ocen {{ rating }}</label><input class="form-control" name="review_rating_count_{{ rating }}" type="number" min="0" value="{{ value }}"></div>
+            {% endfor %}
+        </div>
+        <button class="btn btn-primary" type="submit">Przewidź klaster</button>
+    </div></form>
+    <div id="predict-cluster-result" class="results-region"><div class="empty-state">Wynik predykcji pojawi się tutaj.</div></div>
+</div>
+{% endblock %}

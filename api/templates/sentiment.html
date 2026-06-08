@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Klasyfikacja opinii · Hotel Analytics ML{% endblock %}
+{% block content %}
+<section class="page-header"><div class="container"><span class="eyebrow">Analiza tekstu</span><h1>Klasyfikacja opinii</h1><p>Sprawdź wydźwięk dowolnej opinii hotelowej.</p></div></section>
+<div class="container py-4 narrow-container">
+    <div class="card form-card mb-4"><div class="card-body p-4"><form id="sentiment-form">
+        <label class="form-label" for="review">Treść opinii</label>
+        <textarea class="form-control mb-3" id="review" name="review" rows="6" required>Great clean hotel and helpful staff</textarea>
+        <button class="btn btn-primary" type="submit">Klasyfikuj opinię</button>
+    </form></div></div>
+    <div id="sentiment-result" class="results-region"><div class="empty-state">Wynik analizy pojawi się tutaj.</div></div>
+</div>
+{% endblock %}

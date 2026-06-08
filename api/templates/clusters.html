@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}Klastry · Hotel Analytics ML{% endblock %}
+{% block content %}
+<section class="page-header"><div class="container"><span class="eyebrow">Grupowanie hoteli</span><h1>Klastry hoteli</h1><p>Porównaj charakterystyki grup i przeglądaj należące do nich hotele.</p></div></section>
+<div class="container py-4">
+    <div class="card form-card mb-4"><div class="card-body p-4"><div class="row g-4 align-items-end">
+        <div class="col-lg-5"><h2 class="h5">Podsumowanie wszystkich klastrów</h2><p class="text-secondary mb-3">Wyświetl najważniejsze statystyki i przykładowe hotele.</p><button id="load-clusters" class="btn btn-primary">Pokaż podsumowanie klastrów</button></div>
+        <div class="col-lg-7 border-start-lg"><form id="cluster-details-form" class="row g-3 align-items-end">
+            <div class="col-sm-7"><label class="form-label" for="cluster_id">ID klastra</label><input class="form-control" id="cluster_id" name="cluster_id" type="number" min="0" value="0" required></div>
+            <div class="col-sm-5"><button class="btn btn-outline-primary w-100" type="submit">Pokaż szczegóły</button></div>
+        </form></div>
+    </div></div></div>
+    <div id="clusters-result" class="results-region"><div class="empty-state">Wybierz sposób wyświetlenia klastrów.</div></div>
+</div>
+{% endblock %}
